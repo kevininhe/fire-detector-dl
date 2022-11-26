@@ -26,10 +26,11 @@ def decode_image(img, name):
 
 # Veamos el output de leer una imagen TIF
 def usingRaster(path):
-    #img = rasterio.open(path).read((7,6,2)).transpose((1, 2, 0))
-    img = rasterio.open(path).read().transpose(1, 2, 0)
+    img = rasterio.open(path).read((7,6,2)).transpose((1, 2, 0))
+    #img = rasterio.open(path).read().transpose(1, 2, 0)
     print(img.dtype)
     print(img.shape)
+    print(img)
     return img
 
 def usingTiff(path):
@@ -41,8 +42,30 @@ def usingTiff(path):
     print(img_2)
     return img
 
-img_path = os.path.join(input_path, image_name)
+def RGBTiff(path):
+    inputImage = tifffile.imread(path)
+    get_img_dim7 = inputImage[:,:,6].reshape(256,256,1)
+    get_img_dim6 = inputImage[:,:,5].reshape(256,256,1)
+    get_img_dim2 = inputImage[:,:,1].reshape(256,256,1)
+    three_dim_img = np.concatenate((get_img_dim7,get_img_dim6,get_img_dim2),axis=-1)
+
+    print(three_dim_img.dtype)
+    print(three_dim_img.shape)
+    print(three_dim_img)
+    return three_dim_img
+
+# Image to be read with Raster
+pathKI = "/Users/kevininfante/Library/CloudStorage/OneDrive-UniversidaddelosAndes/Universidad_de_Los_Andes/2022-20/DeepLearning/Proyecto/WebAnalizadorIncendio/inputImage"
+imName = "LC08_L1TP_099069_20200827_20200827_01_RT_p00819.tif"
+img_path = os.path.join(pathKI, imName)
 print('Using Raster')
-usingRaster(img_path)
+rst_img = usingRaster(img_path)
+
+pathKI = "/Users/kevininfante/Library/CloudStorage/OneDrive-UniversidaddelosAndes/Universidad_de_Los_Andes/2022-20/DeepLearning/Proyecto/WebAnalizadorIncendio/webInputImage"
+imName = "LC08_L1TP_099069_20200827_20200827_01_RT_p00819.tif"
+img_path = os.path.join(pathKI, imName)
 print('Using Tiff')
-usingTiff(img_path)
+tiff_img = RGBTiff(img_path)
+
+print("¿Son iguales?")
+print((rst_img==tiff_img).all())

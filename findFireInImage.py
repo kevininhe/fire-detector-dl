@@ -54,6 +54,5 @@ def findFireInImage(imageName,npArrayImage,outputPath,weightsFile):
 
     output_image_name = imageName.replace('.tif','.png')
     output_image = os.path.join(outputPath, output_image_name)
-    cv2.imwrite(output_image, cv2.cvtColor(y_pred, cv2.COLOR_RGB2BGR))
-    print('¡Se encontraron los pixeles de incendios exitosamente!')
+    #cv2.imwrite(output_image, cv2.cvtColor(y_pred, cv2.COLOR_RGB2BGR))
     return cv2.cvtColor(y_pred, cv2.COLOR_RGB2BGR)

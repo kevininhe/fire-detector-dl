@@ -12,16 +12,17 @@ def get_img_762bands(path):
     
     return img
         
-def convertRasterToRGB(inputImage,inputPath,outputPath):
-    if not os.path.exists(outputPath):
-        os.makedirs(outputPath)
+def convertRasterToRGB(inputImage):
+    # Se obtienen las dimensiones 7,6 y 2 de la imagen, y se concatenan
+    get_img_dim7 = inputImage[:,:,6].reshape(256,256,1)
+    get_img_dim6 = inputImage[:,:,5].reshape(256,256,1)
+    get_img_dim2 = inputImage[:,:,1].reshape(256,256,1)
+    three_dim_img = np.concatenate((get_img_dim7,get_img_dim6,get_img_dim2),axis=-1)
 
-    outputImageName = inputImage.replace('.tif','.png')
-    inputImagePath = os.path.join(inputPath, inputImage)
-    img = get_img_762bands(inputImagePath)
-
+    # Normalización y paso a escala RGB
+    img = np.float32(three_dim_img)/MAX_PIXEL_VALUE
     img = np.array(img * 255, dtype=np.uint8)
-    cv2.imwrite(os.path.join(outputPath, outputImageName), cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+    return img
 
 def decode_image(img, name):
     image = np.frombuffer(img,dtype=np.uint16)
