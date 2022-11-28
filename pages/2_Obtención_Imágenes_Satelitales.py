@@ -3,7 +3,7 @@ from streamlit.logger import get_logger
 import pandas as pd
 
 LOGGER = get_logger(__name__)
-LAT_LON_FILE = '/Users/kevininfante/Library/CloudStorage/OneDrive-UniversidaddelosAndes/Universidad_de_Los_Andes/2022-20/DeepLearning/Proyecto/WebAnalizadorIncendio/img_lat_lon.csv'
+LAT_LON_FILE = 'img_lat_lon.csv'
 
 
 def obtencion_imagenes():
