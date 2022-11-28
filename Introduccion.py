@@ -29,8 +29,5 @@ def run():
     """
     )
 
-    #with st.expander("Planteamiento del problema",expanded=True):
-
-
 if __name__ == "__main__":
     run()
