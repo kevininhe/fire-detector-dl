@@ -1,6 +1,6 @@
 import streamlit as st
 from findFireInImage import findFireInImage
-from imageUtilities import decode_image, convertRasterToRGB
+from imageUtilities import decode_image, convertRasterToRGB, convertRasterToRealRGB
 import tifffile
 
 OUTPUT_PATH = './outputImage'
@@ -48,21 +48,27 @@ def segmentacion_semantica():
         if len(st.session_state['images'].keys()) > 0:
             st.subheader("Análisis de incendios en imágen satelital")
             st.session_state['img_counter'] = 0
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns(3)
         for name, path in st.session_state['images'].items():
             st.session_state['img_counter'] += 1
             image = tifffile.imread(path)
             out_image = findFireInImage(name,image,OUTPUT_PATH,WEIGHTS_FILE)
             with col1:
                 if st.session_state['img_counter'] == 1:
-                    st.write('#### Píxeles con Incendio')
+                    st.write('#### Píxeles con Incendio Detectado')
                 st.markdown('**Imágen {}**'.format(st.session_state['img_counter']))
                 st.image(out_image)
             color_image = convertRasterToRGB(image)
             with col2:
                 if st.session_state['img_counter'] == 1:
-                    st.write('#### Imágen satelital en RGB')
+                    st.write('#### Imágen satelital en SWIR-Blue')
                 st.markdown('**Imágen {}**'.format(st.session_state['img_counter']))
                 st.image(color_image)
+            real_RGB_image = convertRasterToRealRGB(image)
+            with col3:
+                if st.session_state['img_counter'] == 1:
+                    st.write('#### Imágen satelital en RGB')
+                st.markdown('**Imágen {}**'.format(st.session_state['img_counter']))
+                st.image(real_RGB_image)
 st.set_page_config(page_title="Segmentacion Semantica", page_icon="🔥")
 segmentacion_semantica()

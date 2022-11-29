@@ -24,6 +24,18 @@ def convertRasterToRGB(inputImage):
     img = np.array(img * 255, dtype=np.uint8)
     return img
 
+def convertRasterToRealRGB(inputImage):
+    # Se obtienen las dimensiones 4, 3 y 2 de la imagen, y se concatenan
+    get_img_dim7 = inputImage[:,:,3].reshape(256,256,1)
+    get_img_dim6 = inputImage[:,:,2].reshape(256,256,1)
+    get_img_dim2 = inputImage[:,:,1].reshape(256,256,1)
+    three_dim_img = np.concatenate((get_img_dim7,get_img_dim6,get_img_dim2),axis=-1)
+
+    # Normalización y paso a escala RGB
+    img = np.float32(three_dim_img)/MAX_PIXEL_VALUE
+    img = np.array(img * 255, dtype=np.uint8)
+    return img
+
 def decode_image(img, name):
     image = np.frombuffer(img,dtype=np.uint16)
     image_reshaped = image[1239:].reshape(256,256,10)
