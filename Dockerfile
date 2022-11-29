@@ -34,4 +34,4 @@ COPY . .
 # For environments with multiple CPU cores, increase the number of workers
 # to be equal to the cores available.
 #CMD exec uvicorn main:app --host 0.0.0.0 --port $PORT --workers 2 
-CMD streamlit run main.py --server.port $PORT
+CMD streamlit run Introduccion.py --server.port $PORT
