@@ -17,11 +17,11 @@ def segmentacion_semantica():
     if not st.session_state['images']:
         st.markdown(
         """
-        Este módulo realiza la segmentación semántica de una imágen satelital para detectar los píxeles con un incendio forestal activo usando el modelo propuesto de Deep Learning.
+        Este módulo realiza la segmentación semántica de una imágen satelital para detectar los píxeles con un incendio forestal activo usando el modelo UNet preentrenado.
 
         Una vez procesada la imagen, se muestra la máscara con el resultado del procesamiento, siendo los píxeles en blanco aquellos con incendio presente.
 
-        Se muestra también la imágen convertida a RGB para una fácil visualización de esta, dado que las imágenes satelitales no son directamente visibles ya que cuentan con más de 3 canales.
+        Se muestran también las bandas SWIR-Blue y RGB de la imágen para una fácil visualización de esta, dado que las imágenes satelitales no son directamente visibles ya que cuentan con más de 3 canales. Nótese que en las bandas SWIR-Blue es más fácil identificar el incendio forestal, por eso la literatura muestra que son una entrada adecuada para los modelos de detección de incendios.
         """)
         st.write("#### Cargue de imágen satelital")
         uploades_files = st.file_uploader("Sube una Imagen Satelital",  type = ['tif'], accept_multiple_files=True)

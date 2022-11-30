@@ -10,12 +10,12 @@ def planteamiento_modelo():
         page_title="Planteamiento Modelo"
     )
 
-    st.write("# Planteamiento del modelo")
+    st.write("# Planteamiento del modelo - Estado del arte")
 
     st.markdown(
         """
-        A continuación se explicarán las partes más importantes del modelo propuesto.
-        #### Vista general del modelo
+        A continuación se explicarán las partes más importantes del modelo preentrenado (UNet), además de varias mejoras que se han realizado en trabajos recientes sobre detección de incendios.
+        #### Vista general del modelo preentrenado - Estado del arte
         """
     )
     img = cv2.imread('./model/Arquitectura_DL_Fire.jpg', cv2.IMREAD_COLOR)
@@ -23,6 +23,7 @@ def planteamiento_modelo():
     st.image(img)
     st.markdown(
         """
+        En la imagen anterior se muestra la arquitectura de un modelo UNet, el cual se está utilizando en este aplicativo, junto con varias mejoras que se han planteado en los trabajos más recientes.
         #### Componentes principales
         **Entrada del modelo**
         
@@ -32,19 +33,11 @@ def planteamiento_modelo():
 
         En Pereira et. al se encontró también que no es necesario usar las 10 bandas de la imágen satelital sino que los mejores resultados se obtienen usando principalmente las bandas SWIR (Shortwave Infrared, o Infrarrojo de onda corta), y la banda Blue (azul), por ende, la entrada al modelo es una imágen de tres bandas: dos SWIR, que son las bandas 6 y 7 de una imágen Landsat 8, y la banda Blue, que es la banda 2.
 
-        Sin embargo, este aplicativo recibe como entrada el parche de tamaño 256 x 256 con 10 bandas, y antes de procesar la imágen extrae las bandas 2, 6 y 7.
-
-        **Tamaño variable del Kernel**
-
-        Basados en el trabajo de Rostami et.al [2], donde se encontró que el uso de kernels convolucionales de tamaños diferentes en forma simultanea permite hacer una mejor clasificación que con un modelo UNet simple, principalmente al clasificar píxeles aislados con incendios forestales, en este trabajo se plantea también el uso de tamaños variables del Kernel.
-
-        **Kernels convolucionales con Dilatación**
-
-        En Rostami et.al se encontró también que el uso de Kernels convolucionales con dilatación permite identificar de mejor manera los píxeles de incendios en incendios de escala múltiple aún cuando el tamaño de la imágen varia. La dilatación en los kernels convolucionales se maneja con un hiperparámetro llamado "tasa de dilatación", el cual amplía el campo de visión de un Kernel pero hace que ignore todo aquello que está fuera de su tamaño original. Por ejemplo, un Kernel 3 x 3 con tasa de dilatación 2 tiene el mismo campo de visión que un Kernel 5 x 5.
+        Por ende, este aplicativo recibe como entrada un parche de tamaño 256 x 256 con 10 bandas, y antes de procesar la imágen se extraen las bandas 2, 6 y 7.
 
         **Max Pooling**
 
-        El modelo aplica Max Pooling en el encoder para ir reduciendo el tamaño de la entrada a medida que esta pasa por las diferentes capas del modelo. Sin embargo, al igual que se reducen las dimensiones de la entrada se aumenta también la profundidad de esta. Esto permite obtener al final un "código" que es una representación reducida de la imágen en un espacio de características diferente, el cual es óptimo para la extracción de características.
+        El modelo aplica Max Pooling en el encoder para ir reduciendo el tamaño de la entrada a medida que esta pasa por las diferentes capas del modelo. Sin embargo, al igual que se reducen las dimensiones de la entrada se aumenta también la profundidad de esta. Esto permite obtener en las capas más profundas.
 
         **Convolucional Transpuesta + Upsampling**
 
@@ -52,14 +45,28 @@ def planteamiento_modelo():
 
         **Concatenar**
 
-        Heredado de la arquitectura Unet, la salida de las diferentes capas del encoder se usa como una entrada adicional de las capas del decoder, esto para evitar el problema de desvanecimiento del gradiente.
+        Concepto típico de la arquitectura Unet, la salida de las diferentes capas del encoder se usa como una entrada adicional de las capas del decoder que tengan el mismo tamaño, esto para evitar el problema de desvanecimiento del gradiente.
 
         **Softmax**
 
         Ya que en este modelo la detección de incendios forestales en imágenes satelitales se planteó como un problema de segmentación semántica, donde se deben identificar los píxeles con incendios activos, la salida del modelo es una máscara con píxeles cuyos valores solamente son 1 si se detectó un incendio forestal en ellos o 0 si no tienen incendio forestal. La función Softmax permite obtener valores entre 1 y 0, y junto con la función de costo de entropía cruzada binaria, permiten obtener una matriz de valores entre 1 y 0, cada uno correspondiente a la probabilidad de que un píxel tenga un incendio forestal, y esta salida se grafica para poder identificar visualmente los píxeles donde el modelo detectó un incendio.
+        
+        #### Mejoras planteadas en trabajos recientes
 
+        **Tamaño variable del Kernel**
+
+        En el trabajo de Rostami et.al [2] se encontró que el uso de kernels convolucionales de tamaños diferentes en forma simultanea permite hacer una mejor clasificación que con un modelo UNet simple, principalmente al clasificar píxeles aislados con incendios forestales.
+
+        **Kernels convolucionales con Dilatación**
+
+        En Rostami et.al se encontró también que el uso de Kernels convolucionales con dilatación permite identificar de mejor manera los píxeles de incendios en incendios de escala múltiple aún cuando el tamaño de la imágen varia. La dilatación en los kernels convolucionales se maneja con un hiperparámetro llamado "tasa de dilatación", el cual amplía el campo de visión de un Kernel pero hace que ignore todo aquello que está fuera de su tamaño original. Por ejemplo, un Kernel 3 x 3 con tasa de dilatación 2 tiene el mismo campo de visión que un Kernel 5 x 5.
+        
+        **Segmentación no supervisada usando la banda "cirrus cloud"**
+
+        En Sun et.al [3] se encontró que al hacer una clasificación no supervisada de la banda 9 (cirrus cloud) de las imágenes satelitales usando K-means y agregando esta entrada al modelo, se logra aumentar la velocidad y estabilidad del entrenamiento del modelo, permitiendo construir un modelo más simple que requiere de menos recursos computacionales. Esto implica que hay cierta relación entre la nubosidad del terreno y los incendios forestales. 
         [1]: <https://www.sciencedirect.com/science/article/abs/pii/S092427162100160X?via%3Dihub>
         [2]: <https://www.mdpi.com/2072-4292/14/4/992>
+        [3]: <https://arxiv.org/pdf/2201.09671.pdf>
         """
     )
 planteamiento_modelo()
