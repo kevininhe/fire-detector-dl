@@ -61,9 +61,13 @@ def planteamiento_modelo():
 
         En Rostami et.al se encontró también que el uso de Kernels convolucionales con dilatación permite identificar de mejor manera los píxeles de incendios en incendios de escala múltiple aún cuando el tamaño de la imágen varia. La dilatación en los kernels convolucionales se maneja con un hiperparámetro llamado "tasa de dilatación", el cual amplía el campo de visión de un Kernel pero hace que ignore todo aquello que está fuera de su tamaño original. Por ejemplo, un Kernel 3 x 3 con tasa de dilatación 2 tiene el mismo campo de visión que un Kernel 5 x 5.
         
+        **Profundidad de la UNet**
+        En Rostami et.al se encontró que usar 5 capas convolucionales daba un mejor resultado que usar 3 capas convolucionales, que es lo planteado en el modelo UNet, esto por supuesto combinandolo con técnicas de variación del tamaño del kernel y el uso de Kernels convolucionales con dilatación.
+        
         **Segmentación no supervisada usando la banda "cirrus cloud"**
 
-        En Sun et.al [3] se encontró que al hacer una clasificación no supervisada de la banda 9 (cirrus cloud) de las imágenes satelitales usando K-means y agregando esta entrada al modelo, se logra aumentar la velocidad y estabilidad del entrenamiento del modelo, permitiendo construir un modelo más simple que requiere de menos recursos computacionales. Esto implica que hay cierta relación entre la nubosidad del terreno y los incendios forestales. 
+        En Sun et.al [3] se encontró que al hacer una clasificación no supervisada de la banda 9 (cirrus cloud) de las imágenes satelitales usando K-means y agregando esta entrada al modelo, se logra aumentar la velocidad y estabilidad del entrenamiento del modelo, permitiendo construir un modelo más simple que requiere de menos recursos computacionales. Esto implica que hay cierta relación entre la nubosidad del terreno y los incendios forestales.
+        
         [1]: <https://www.sciencedirect.com/science/article/abs/pii/S092427162100160X?via%3Dihub>
         [2]: <https://www.mdpi.com/2072-4292/14/4/992>
         [3]: <https://arxiv.org/pdf/2201.09671.pdf>
