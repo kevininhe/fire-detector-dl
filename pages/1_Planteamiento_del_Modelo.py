@@ -62,6 +62,7 @@ def planteamiento_modelo():
         En Rostami et.al se encontró también que el uso de Kernels convolucionales con dilatación permite identificar de mejor manera los píxeles de incendios en incendios de escala múltiple aún cuando el tamaño de la imágen varia. La dilatación en los kernels convolucionales se maneja con un hiperparámetro llamado "tasa de dilatación", el cual amplía el campo de visión de un Kernel pero hace que ignore todo aquello que está fuera de su tamaño original. Por ejemplo, un Kernel 3 x 3 con tasa de dilatación 2 tiene el mismo campo de visión que un Kernel 5 x 5.
         
         **Profundidad de la UNet**
+        
         En Rostami et.al se encontró que usar 5 capas convolucionales daba un mejor resultado que usar 3 capas convolucionales, que es lo planteado en el modelo UNet, esto por supuesto combinandolo con técnicas de variación del tamaño del kernel y el uso de Kernels convolucionales con dilatación.
         
         **Segmentación no supervisada usando la banda "cirrus cloud"**
